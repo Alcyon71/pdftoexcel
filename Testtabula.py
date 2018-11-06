@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
 import tabula
 import pandas as pd
+from openpyxl import load_workbook
+#TODO : Choix du fichier à lire
 
 # Read pdf into DataFrame
 df = tabula.read_pdf("test.pdf", pages='all', multiple_tables=True)
