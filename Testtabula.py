@@ -2,6 +2,7 @@
 import tabula
 import pandas as pd
 from openpyxl import load_workbook
+from openpyxl.utils.dataframe import dataframe_to_rows
 #TODO : Choix du fichier à lire
 
 # Read pdf into DataFrame
@@ -28,11 +29,22 @@ for row in merge.itertuples():
     if type(row[10]) is float:
         merge.iloc[row[0], 9] = merge.iloc[row[0], 10]
 
+#On supprime la colonne 10 et 4
+merge = merge.drop([4, 10], axis=1)
+print(merge)
 
+#Ajout d'une feuille et copie des valeurs
+wb = load_workbook(filename='merge.xlsm', keep_vba=True)
+ws = wb.create_sheet('merge')
 
-writer = pd.ExcelWriter('merge.xlsx', )
-merge.to_excel(writer, 'merge')
-writer.save()
+for r in dataframe_to_rows(merge, index=False, header=False):
+    ws.append(r)
+
+wb.save('merge.xlsm')
+
+# writer = pd.ExcelWriter('merge.xlsx', )
+# merge.to_excel(writer, 'merge')
+# writer.save()
 
 
 
