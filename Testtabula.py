@@ -3,6 +3,7 @@ import tabula
 import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
+from datetime import date
 #TODO : Choix du fichier à lire
 
 # Read pdf into DataFrame
@@ -34,18 +35,19 @@ merge = merge.drop([4, 10], axis=1)
 print(merge)
 
 #Ajout d'une feuille et copie des valeurs
-wb = load_workbook(filename='merge.xlsm', keep_vba=True)
-#TODO : Changer le nom de l'onglet avec la date
-ws = wb.create_sheet('merge')
+# wb = load_workbook(filename='merge.xlsx')
+# #TODO : Changer le nom de l'onglet avec la date
+# ws = wb.create_sheet(date.today().strftime("%d-%m-%y"))
+#
+# for r in dataframe_to_rows(merge, index=False, header=False):
+#     ws.append(r)
+#
+# wb.save('merge.xlsx')
+HeaderExcel = ["Type","Famille","Nuance","Identifiant échantillon","PE","Réacteur","Fiole","Observations","Délai"]
 
-for r in dataframe_to_rows(merge, index=False, header=False):
-    ws.append(r)
-
-wb.save('merge.xlsm')
-
-# writer = pd.ExcelWriter('merge.xlsx', )
-# merge.to_excel(writer, 'merge')
-# writer.save()
+writer = pd.ExcelWriter('merge.xlsx', )
+merge.to_excel(writer, date.today().strftime("%d-%m-%y"), header=HeaderExcel, index=False)
+writer.save()
 
 
 
