@@ -24,3 +24,7 @@ import os, os.path
 # wb.save(os.path.dirname(os.path.abspath(__file__)) + '\Test2.xlsm')
 # wb.close()
 
+HeaderExcel = ["Type","Famille","Nuance",'Identifiant échantillon',"PE","Réacteur","Fiole","Observations","Délai"]
+for i in range(len(HeaderExcel)):
+    print(i)
+    print(HeaderExcel[i])

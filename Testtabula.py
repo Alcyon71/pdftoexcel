@@ -11,7 +11,6 @@ from tkFileDialog import askopenfilename
 #from openpyxl import load_workbook
 #from openpyxl.utils.dataframe import dataframe_to_rows
 from datetime import date
-#TODO : Choix du fichier à lire
 
 #Fenetre tres simple pour choisir le fichier PDF
 def choixfichier():
@@ -58,10 +57,8 @@ def creerexcel(valeur):
     tbl.Name ="EssaiTable"
     sht.range('A2').options(index=False, header=False).value = valeur
     #Boucle pour changer le nom des colonnes
-    i = 0
-    for head in HeaderExcel:
-        i += 1
-        tbl.ListColumns(i).Name = unicode(head,'utf-8')
+    for i in range(len(HeaderExcel)):
+        tbl.ListColumns(i+1).Name = unicode(HeaderExcel[i], 'utf-8')
 
 
     #wb.save(os.path.dirname(os.path.abspath(__file__)) + '\Test2.xlsm')
