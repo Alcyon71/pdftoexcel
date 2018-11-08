@@ -54,7 +54,7 @@ def creerexcel(valeur):
     #Todo: vérifier si la feuille existe déja, sinon erreur
     sht = wb.sheets.add(date.today().strftime("%d-%m-%y"), after=wb.sheets[-1])
     tbl = sht.api.ListObjects.add()
-    tbl.Name ="EssaiTable"
+    tbl.Name = "Tab_" + date.today().strftime("%d%m%y")
     sht.range('A2').options(index=False, header=False).value = valeur
     #Boucle pour changer le nom des colonnes
     for i in range(len(HeaderExcel)):
