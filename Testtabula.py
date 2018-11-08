@@ -5,6 +5,8 @@ import tabula
 import pandas as pd
 import Tkinter as tk
 import tkMessageBox
+import win32com.client
+import xlwings as xw
 from tkFileDialog import askopenfilename
 #from openpyxl import load_workbook
 #from openpyxl.utils.dataframe import dataframe_to_rows
@@ -16,10 +18,7 @@ def choixfichier():
     root = tk.Tk()
     root.withdraw()                 # pour ne pas afficher la fenêtre Tk
     name = askopenfilename()   # lance la fenêtre
-    print(name)
     _, ext = os.path.splitext(name)
-    print(ext)
-
     if ext == ".pdf":
         return name
     else:
@@ -28,7 +27,6 @@ def choixfichier():
 
 def extrairepdf(Cheminpdf):
     # Read pdf into DataFrame
-    print(Cheminpdf)
     df = tabula.read_pdf(Cheminpdf, pages='all', multiple_tables=True)
     #on supprime les 3 premieres lignes
     df = [df[i].iloc[3:,] for i in range(len(df))]
@@ -39,40 +37,67 @@ def extrairepdf(Cheminpdf):
 
     # on va essayer de filtrer les identifiants des échantillons, soit bon, soit coulée soit fils de la ligne précédente
     for row in merge.itertuples():
-        #print(row)
-        #print(merge.iloc[row[0],3])
-        #Un casier a maximum 4 chiffre
         if len(row[4]) > 4:
             merge.iloc[row[0],3] = merge.iloc[row[0],3].replace(" ", "-")
         else:
             merge.iloc[row[0], 3] = merge.iloc[row[0]-1, 3]
-
-    #TODO : Si la date n'est pas en colonne 9(10 dans le namedtuple), la copier de la colonne 10(11 dans le namedtuple), puis sup la colonne 10
-        #print(type(row[10]))
         if type(row[10]) is float:
             merge.iloc[row[0], 9] = merge.iloc[row[0], 10]
 
     #On supprime la colonne 10 et 4
     merge = merge.drop([4, 10], axis=1)
-    print(merge)
     return merge
 
 def creerexcel(valeur):
-    HeaderExcel = ["Type","Famille","Nuance","Identifiant échantillon","PE","Réacteur","Fiole","Observations","Délai"]
+    HeaderExcel = ["Type","Famille","Nuance",'Identifiant échantillon',"PE","Réacteur","Fiole","Observations","Délai"]
 
-    writer = pd.ExcelWriter('merge.xlsx', )
-    valeur.to_excel(writer, date.today().strftime("%d-%m-%y"), header=HeaderExcel, index=False)
-    writer.save()
+    wb = xw.Book(os.path.dirname(os.path.abspath(__file__)) + '\Test.xlsm')
+    #Todo: vérifier si la feuille existe déja, sinon erreur
+    sht = wb.sheets.add(date.today().strftime("%d-%m-%y"), after=wb.sheets[-1])
+    tbl = sht.api.ListObjects.add()
+    tbl.Name ="EssaiTable"
+    sht.range('A2').options(index=False, header=False).value = valeur
+    #Boucle pour changer le nom des colonnes
+    i = 0
+    for head in HeaderExcel:
+        i += 1
+        tbl.ListColumns(i).Name = unicode(head,'utf-8')
 
+
+    #wb.save(os.path.dirname(os.path.abspath(__file__)) + '\Test2.xlsm')
+    #wb.close()
+
+    #Ecrire dans le fichier avec to_excel, desactiver pour essayer xlwings
+    # writer = pd.ExcelWriter('merge.xlsx', )
+    # valeur.to_excel(writer, date.today().strftime("%d-%m-%y"), header=HeaderExcel, index=False)
+    # writer.save()
+
+#Plus utile si utilisation de xlwings pour copier les infos du dataframe
+# def executermacro():
+#     try:
+#         xlapp = win32com.client.DispatchEx('Excel.Application')
+#         xlspath = os.path.expanduser(os.path.dirname(os.path.abspath(__file__)) + '\Test.xlsm')
+#         wb = xlapp.Workbooks.Open(Filename=xlspath)
+#         xlapp.Run('ImportFeuille')
+#         wb.Save()
+#         xlapp.Quit()
+#         print("Macro ran successfully!")
+#     except:
+#         print("Error found while running the excel macro!")
+#         xlapp.Quit()
 
 if __name__ == '__main__':
     Nonfichier = choixfichier()
     if Nonfichier is False:
-        tkMessageBox.showerror("Titre", "Mauvais fichier! ce n'est pas un pdf")
+        tkMessageBox.showerror("Mauvis fichier!", "Mauvais fichier! ce n'est pas un pdf")
         sys.exit()
     else:
-        creerexcel(extrairepdf(Nonfichier))
-
+        try:
+            creerexcel(extrairepdf(Nonfichier))
+        except ValueError as exceptmessage:
+            tkMessageBox.showerror("Erreur", "Erreur lors de la création du fichier excel :" + str(exceptmessage))
+        except:
+            tkMessageBox.showerror("ERREUR!", "Erreur lors de la création du fichier excel!")
 
 
 
