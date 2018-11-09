@@ -1,0 +1,13 @@
+	Task	=	Analysis
+		Method	=	"Acier : Bore BT"
+		SampleName	=	"REFECH"
+//			Rack	=	
+//			Cell	=	
+			Lines	=	All
+			Weight	=	POIDS
+			Volume	=	VOLUME
+			Dilution	=	1.000
+		ApplyBlank	=	Yes
+		ApplyMini	=	Yes
+		ReplicatesMono	=	3
+		ReplicatesPoly	=	3

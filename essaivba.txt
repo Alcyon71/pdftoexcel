@@ -62,6 +62,19 @@
 		ReplicatesPoly	=	3
 	Task	=	Analysis
 		Method	=	"Acier : Bore BT"
+		SampleName	=	"ET 281-1"
+//			Rack	=	
+//			Cell	=	
+			Lines	=	All
+			Weight	=	5465
+			Volume	=	5000
+			Dilution	=	1.000
+		ApplyBlank	=	Yes
+		ApplyMini	=	Yes
+		ReplicatesMono	=	3
+		ReplicatesPoly	=	3
+	Task	=	Analysis
+		Method	=	"Acier : Bore BT"
 		SampleName	=	"1439699-994"
 //			Rack	=	
 //			Cell	=	
@@ -127,6 +140,19 @@
 		ReplicatesPoly	=	3
 	Task	=	Analysis
 		Method	=	"Acier : Bore BT"
+		SampleName	=	"ET 281-1"
+//			Rack	=	
+//			Cell	=	
+			Lines	=	All
+			Weight	=	5465
+			Volume	=	5000
+			Dilution	=	1.000
+		ApplyBlank	=	Yes
+		ApplyMini	=	Yes
+		ReplicatesMono	=	3
+		ReplicatesPoly	=	3
+	Task	=	Analysis
+		Method	=	"Acier : Bore BT"
 		SampleName	=	"1440278-971"
 //			Rack	=	
 //			Cell	=	
@@ -177,4 +203,3 @@
 		ApplyMini	=	Yes
 		ReplicatesMono	=	3
 		ReplicatesPoly	=	3
-
