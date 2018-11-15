@@ -17,6 +17,8 @@ def choixfichier():
     root = tk.Tk()
     root.withdraw()                 # pour ne pas afficher la fenêtre Tk
     name = askopenfilename()   # lance la fenêtre
+    #print(str(name))
+    name = name.encode('mbcs')
     _, ext = os.path.splitext(name)
     if ext == ".pdf":
         return name
@@ -45,6 +47,7 @@ def extrairepdf(Cheminpdf):
 
     #On supprime la colonne 10 et 4
     merge = merge.drop([4, 10], axis=1)
+    print(merge)
     return merge
 
 def creerexcel(valeur):
@@ -85,16 +88,17 @@ def creerexcel(valeur):
 
 if __name__ == '__main__':
     Nonfichier = choixfichier()
+    print(sys.getfilesystemencoding())
     if Nonfichier is False:
         tkMessageBox.showerror("Mauvis fichier!", "Mauvais fichier! ce n'est pas un pdf")
         sys.exit()
     else:
-        try:
-            creerexcel(extrairepdf(Nonfichier))
-        except ValueError as exceptmessage:
-            tkMessageBox.showerror("Erreur", "Erreur lors de la création du fichier excel :" + str(exceptmessage))
-        except:
-            tkMessageBox.showerror("ERREUR!", "Erreur lors de la création du fichier excel!")
+        #try:
+        creerexcel(extrairepdf(Nonfichier))
+        #except ValueError as exceptmessage:
+            #tkMessageBox.showerror("Erreur", "Erreur lors de la création du fichier excel :" + str(exceptmessage))
+        #except:
+            #tkMessageBox.showerror("ERREUR!", "Erreur lors de la création du fichier excel!")
 
 
 
