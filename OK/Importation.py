@@ -15,6 +15,9 @@ def choixfichier():
     root = tk.Tk()
     root.withdraw()                 # pour ne pas afficher la fenêtre Tk
     name = askopenfilename()   # lance la fenêtre
+    #Pour les caractéres spéciaux dans le nom du fichier
+    # voir pour utiliser la valeur de : sys.getfilesystemencoding()
+    name = name.encode('mbcs')
     _, ext = os.path.splitext(name)
     if ext == ".pdf":
         return name
